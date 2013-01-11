@@ -71,7 +71,7 @@ module Sinatra
           end
         else
           if Rack.const_defined?('Flash')
-            flash[:error] = "The email or password you entered is incorrect."
+            flash[:error] = t.auth.login.failure
           end
           redirect '/login'
         end
@@ -80,7 +80,7 @@ module Sinatra
       app.get '/logout/?' do
         session[:user] = nil
         if Rack.const_defined?('Flash')
-          flash[:notice] = "Logout successful."
+          flash[:notice] = t.auth.logout.success
         end
         return_to = ( session[:return_to] ? session[:return_to] : '/' )
         redirect return_to
@@ -99,12 +99,12 @@ module Sinatra
         if @user.valid && @user.id
           session[:user] = @user.id
           if Rack.const_defined?('Flash')
-            flash[:notice] = "Account created."
+            flash[:notice] = t.auth.user.created
           end
           redirect '/'
         else
           if Rack.const_defined?('Flash')
-            flash[:error] = "There were some problems creating your account: #{@user.errors}."
+            flash[:error] = @user.errors}
           end
           redirect '/signup?' + hash_to_query_string(params['user'])
         end
@@ -130,12 +130,12 @@ module Sinatra
 
         if user.update(user_attributes)
           if Rack.const_defined?('Flash')
-            flash[:notice] = 'Account updated.'
+            flash[:notice] = t.auth.user.updated
           end
           redirect '/'
         else
           if Rack.const_defined?('Flash')
-            flash[:error] = "Whoops, looks like there were some problems with your updates: #{user.errors}."
+            flash[:error] =  user.errors
           end
           redirect "/users/#{user.id}/edit?" + hash_to_query_string(user_attributes)
         end
@@ -147,7 +147,7 @@ module Sinatra
 
         if User.delete(params[:id])
           if Rack.const_defined?('Flash')
-            flash[:notice] = "User deleted."
+            flash[:notice] = t.auth.user.deleted
           end
         else
           if Rack.const_defined?('Flash')
