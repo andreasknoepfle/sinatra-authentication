@@ -104,7 +104,7 @@ module Sinatra
           redirect '/'
         else
           if Rack.const_defined?('Flash')
-            flash[:error] = @user.errors}
+            flash[:error] = @user.errors
           end
           redirect '/signup?' + hash_to_query_string(params['user'])
         end
