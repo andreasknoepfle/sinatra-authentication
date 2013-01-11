@@ -59,7 +59,7 @@ module Sinatra
           session[:user] = user.id
 
           if Rack.const_defined?('Flash')
-            flash[:notice] = "Login successful."
+            flash[:notice] = t.auth.login.success
           end
 
           if session[:return_to]
